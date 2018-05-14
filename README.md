@@ -1,24 +1,17 @@
-# README
+# Page View API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Context
 
-Things you may want to cover:
+The API is built using Ruby 2.5.0 and Rails 5.1.6.
 
-* Ruby version
+It returns a JSON response containing the query result from Elasticsearch for given values.
 
-* System dependencies
+## Getting Started
 
-* Configuration
+Start up the app
 
-* Database creation
+`rails s -p 3000`
 
-* Database initialization
+Go to http://localhost:3000/api/page_view) to see sample data returned from Elasticsearch.
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+You can run the test specs via `rspec` and a coverage report `index.html` will be created under the `coverage` directory.
