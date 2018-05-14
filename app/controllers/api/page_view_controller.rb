@@ -1,13 +1,12 @@
 class Api::PageViewController < ApplicationController
   include Searchable
 
-  before_action :sample_data, only: :index
-
   # Fetch sample data from Elasticsearch.
   #
   def index
     @client.cluster.health
 
+    sample_data = PageView.map_sample_data
     before = sample_data[:before]
     after = sample_data[:after]
     interval = sample_data[:interval]
@@ -23,17 +22,24 @@ class Api::PageViewController < ApplicationController
     render json: [{ error: error }]
   end
 
-  private
+  # Fetch data from Elasticsearch.
+  #
+  def fetch
+    @client.cluster.health
 
-  def sample_data
-    {
-      urls: [
-        'http://www.news.com.au/travel/travel-updates/incidents/disruptive-passenger-grounds-flight-after-storming-cockpit/news-story/5949c1e9542df41fb89e6cdcdc16b615',
-        'http://www.smh.com.au/sport/tennis/an-open-letter-from-martina-navratilova-to-margaret-court-arena-20170601-gwhuyx.html'
-      ],
-      before: Date.parse('2017-06-04').strftime('%Q'), # Convert date to milliseconds
-      after: Date.parse('2017-05-31').strftime('%Q'), # Convert date to milliseconds
-      interval: '10m'
-    }
+    param_data = PageView.map_param_data params
+    before = param_data[:before]
+    after = param_data[:after]
+    interval = param_data[:interval]
+
+    response = []
+
+    param_data[:urls].each do |url|
+      response << search({ page_url: url }, { before: before, after: after }, interval)
+    end
+
+    render json: response
+  rescue => error
+    render json: [{ error: error }]
   end
 end
