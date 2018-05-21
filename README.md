@@ -8,6 +8,10 @@ It returns a JSON response containing the query result from Elasticsearch for gi
 
 ## Getting Started
 
+Install gems
+
+`bundle`
+
 Start up the app
 
 `rails s -p 3000`
